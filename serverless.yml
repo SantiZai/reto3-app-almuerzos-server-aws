@@ -29,6 +29,12 @@ functions:
       - httpApi:
           path: /employees
           method: post
+  createMenu:
+    handler: src/menus/createMenu.createMenu
+    events:
+      - httpApi:
+          path: /menus
+          method: post
   
 resources:
   Resources:
