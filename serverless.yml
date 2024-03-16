@@ -1,7 +1,7 @@
 org: santi
 app: aws-node-api-gateway
 service: aws-node-api-gateway
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
@@ -29,6 +29,12 @@ functions:
       - httpApi:
           path: /employees
           method: post
+  getMenus:
+    handler: src/menus/getMenus.getMenus
+    events:
+      - httpApi:
+          path: /menus/{position}
+          method: get
   createMenu:
     handler: src/menus/createMenu.createMenu
     events:
@@ -41,7 +47,7 @@ functions:
       - httpApi:
           path: /orders
           method: post
-  
+
 resources:
   Resources:
     MenusTable:
