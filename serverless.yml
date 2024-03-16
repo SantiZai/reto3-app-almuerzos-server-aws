@@ -23,12 +23,6 @@ functions:
       - httpApi:
           path: /
           method: get
-  createEmployee:
-    handler: src/employees/createEmployee.createEmployee
-    events:
-      - httpApi:
-          path: /employees
-          method: post
   getMenus:
     handler: src/menus/getMenus.getMenus
     events:
@@ -46,6 +40,18 @@ functions:
     events:
       - httpApi:
           path: /orders
+          method: post
+  register:
+    handler: src/auth/register.register
+    events:
+      - httpApi:
+          path: /auth/register
+          method: post
+  login:
+    handler: src/auth/login.login
+    events:
+      - httpApi:
+          path: /auth/login
           method: post
 
 resources:
