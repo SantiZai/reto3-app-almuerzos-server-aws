@@ -1,0 +1,67 @@
+org: santi
+app: aws-node-api-gateway
+service: aws-node-api-gateway
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: sa-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:sa-east-1:471112943987:table/Employees
+        - arn:aws:dynamodb:sa-east-1:471112943987:table/Menus
+        - arn:aws:dynamodb:sa-east-1:471112943987:table/Orders
+
+functions:
+  api:
+    handler: src/index.handler
+    events:
+      - httpApi:
+          path: /
+          method: get
+  createEmployee:
+    handler: src/employees/createEmployee.createEmployee
+    events:
+      - httpApi:
+          path: /employees
+          method: post
+  
+resources:
+  Resources:
+    MenusTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Menus
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+    EmployeesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Employees
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+    OrdersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Orders
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
