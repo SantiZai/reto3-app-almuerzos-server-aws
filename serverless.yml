@@ -35,6 +35,12 @@ functions:
       - httpApi:
           path: /menus
           method: post
+  createOrder:
+    handler: src/orders/createOrder.createOrder
+    events:
+      - httpApi:
+          path: /orders
+          method: post
   
 resources:
   Resources:
