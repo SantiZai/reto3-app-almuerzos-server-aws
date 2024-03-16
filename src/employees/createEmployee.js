@@ -1,10 +1,10 @@
-import { v4 } from "uuid";
-import { DynamoDB } from "aws-sdk";
+const { v4 } = require("uuid");
+const AWS = require("aws-sdk");
 
-export async function createEmployee(event) {
+module.exports.createEmployee = async (event) => {
   try {
     // connection object
-    const dynamoDb = new DynamoDB.DocumentClient();
+    const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
     // employee info
     const { fullname, identifier, position } = JSON.parse(event.body);
@@ -36,4 +36,4 @@ export async function createEmployee(event) {
       body: JSON.stringify({ message: e.message }),
     };
   }
-}
+};
