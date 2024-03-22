@@ -3,16 +3,12 @@ const AWS = require("aws-sdk");
 AWS.config.update({ region: "sa-east-1" });
 const sns = new AWS.SNS();
 
-module.exports.createOrderPushNotification = async (order) => {
+module.exports.createOrderPushNotification = async (order, token) => {
   const pushNotificationPayload = {
     title: "Nueva orden creada",
-    body: "Tu orden ha sido creada satisfactoriamente",
-    data: {
-      createdAt: new Date(),
-      order : {
-        menu: order.menus
-      }
-    },
+    body: `Tu orden #${order.id} ha sido creada exitosamente`,
+    data: order,
+    to: token,
   };
 
   const params = {
@@ -21,9 +17,13 @@ module.exports.createOrderPushNotification = async (order) => {
   };
 
   try {
-    await sns.publish(params).promise();
-    console.log();
+    const response = await sns.publish(params).promise();
+    console.log("Notificación push enviada correctamente");
+    return {
+      response,
+      order
+    };
   } catch (e) {
-    console.error(e);
+    console.error("Error al enviar la notificación push:", e);
   }
 };
