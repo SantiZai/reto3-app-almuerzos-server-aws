@@ -1,13 +1,21 @@
 const { v4 } = require("uuid");
-const AWS = require("aws-sdk");
+
+const {
+  DynamoDBDocument,
+} = require("@aws-sdk/lib-dynamodb");
+
+const {
+  DynamoDB,
+} = require("@aws-sdk/client-dynamodb");
 
 module.exports.register = async (event) => {
   try {
-    const dynamoDb = new AWS.DynamoDB.DocumentClient();
+    const dynamoDb = DynamoDBDocument.from(new DynamoDB());
 
     const { fullname, identifier, position } = JSON.parse(event.body);
     const id = v4();
-    const createdAt = new Date();
+    const date = new Date
+    const createdAt = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
     const newEmployee = {
       id,
       createdAt,
@@ -20,8 +28,7 @@ module.exports.register = async (event) => {
       .put({
         TableName: "Employees",
         Item: newEmployee,
-      })
-      .promise();
+      });
 
     return {
       statusCode: 201,

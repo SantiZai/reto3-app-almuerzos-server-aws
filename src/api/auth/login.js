@@ -1,8 +1,14 @@
-const AWS = require("aws-sdk");
+const {
+  DynamoDBDocument,
+} = require("@aws-sdk/lib-dynamodb");
+
+const {
+  DynamoDB,
+} = require("@aws-sdk/client-dynamodb");
 
 module.exports.login = async (event) => {
   try {
-    const dynamoDb = new AWS.DynamoDB.DocumentClient();
+    const dynamoDb = DynamoDBDocument.from(new DynamoDB());
 
     const user = JSON.parse(event.body);
 
@@ -16,8 +22,7 @@ module.exports.login = async (event) => {
         ExpressionAttributeValues: {
           ":fullname": user.fullname,
         },
-      })
-      .promise();
+      });
 
     if (String(existingUsers.Items[0].identifier) === String(user.identifier)) {
       return {

@@ -1,8 +1,14 @@
-const AWS = require("aws-sdk");
+const {
+  DynamoDBDocument,
+} = require("@aws-sdk/lib-dynamodb");
+
+const {
+  DynamoDB,
+} = require("@aws-sdk/client-dynamodb");
 
 module.exports.getMenus = async (event) => {
   try {
-    const dynamoDb = new AWS.DynamoDB.DocumentClient();
+    const dynamoDb = DynamoDBDocument.from(new DynamoDB());
 
     const queryPosition = event.pathParameters.position;
 
@@ -16,8 +22,7 @@ module.exports.getMenus = async (event) => {
         ExpressionAttributeValues: {
           ":position": queryPosition.toLowerCase(),
         },
-      })
-      .promise();
+      });
 
     return {
       statusCode: 200,
