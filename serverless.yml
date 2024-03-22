@@ -11,10 +11,12 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:*
+        - sns:*
       Resource:
         - arn:aws:dynamodb:sa-east-1:471112943987:table/Employees
         - arn:aws:dynamodb:sa-east-1:471112943987:table/Menus
         - arn:aws:dynamodb:sa-east-1:471112943987:table/Orders
+        - arn:aws:sns:sa-east-1:471112943987:create-order
 
 functions:
   api:
@@ -23,36 +25,49 @@ functions:
       - httpApi:
           path: /
           method: get
+
   getMenus:
-    handler: src/menus/getMenus.getMenus
+    handler: src/api/menus/getMenus.getMenus
     events:
       - httpApi:
           path: /menus/{position}
           method: get
+
   createMenu:
-    handler: src/menus/createMenu.createMenu
+    handler: src/api/menus/createMenu.createMenu
     events:
       - httpApi:
           path: /menus
           method: post
+
   createOrder:
-    handler: src/orders/createOrder.createOrder
+    handler: src/api/orders/createOrder.createOrder
     events:
       - httpApi:
           path: /orders
           method: post
+
   register:
-    handler: src/auth/register.register
+    handler: src/api/auth/register.register
     events:
       - httpApi:
           path: /auth/register
           method: post
+
   login:
-    handler: src/auth/login.login
+    handler: src/api/auth/login.login
     events:
       - httpApi:
           path: /auth/login
           method: post
+  dispatcher:
+    handler: src/sns/push/android.createOrderPushNotification
+    events:
+      - sns:
+          arn: arn:aws:sns:sa-east-1:471112943987:create-order
+
+plugins:
+  - serverless-pseudo-parameters
 
 resources:
   Resources:
@@ -67,6 +82,7 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+
     EmployeesTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -78,6 +94,7 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+
     OrdersTable:
       Type: AWS::DynamoDB::Table
       Properties:
