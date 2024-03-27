@@ -1,12 +1,8 @@
 const { v4 } = require("uuid");
 
-const {
-  DynamoDBDocument,
-} = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocument } = require("@aws-sdk/lib-dynamodb");
 
-const {
-  DynamoDB,
-} = require("@aws-sdk/client-dynamodb");
+const { DynamoDB } = require("@aws-sdk/client-dynamodb");
 
 module.exports.createMenu = async (event) => {
   try {
@@ -14,8 +10,8 @@ module.exports.createMenu = async (event) => {
 
     const { name, position, type } = JSON.parse(event.body);
     const id = v4();
-    const date = new Date
-    const createdAt = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+    const date = new Date();
+    const createdAt = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
     const newMenu = {
       id,
       createdAt,
@@ -24,14 +20,16 @@ module.exports.createMenu = async (event) => {
       type: type.toLowerCase(),
     };
 
-    await dynamoDb
-      .put({
-        TableName: "Menus",
-        Item: newMenu,
-      });
+    await dynamoDb.put({
+      TableName: "Menus",
+      Item: newMenu,
+    });
 
     return {
       statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(newMenu),
     };
   } catch (e) {
