@@ -2,6 +2,7 @@ org: santi
 app: aws-node-api-gateway
 service: aws-node-api-gateway
 frameworkVersion: "3"
+useDotenv: true
 
 provider:
   name: aws
@@ -13,10 +14,10 @@ provider:
         - dynamodb:*
         - sns:*
       Resource:
-        - arn:aws:dynamodb:sa-east-1:471112943987:table/Employees
-        - arn:aws:dynamodb:sa-east-1:471112943987:table/Menus
-        - arn:aws:dynamodb:sa-east-1:471112943987:table/Orders
-        - arn:aws:sns:sa-east-1:471112943987:create-order
+        - ${env:ARN_EMPLOYEES_TABLE}
+        - ${env:ARN_MENUS_TABLE}
+        - ${env:ARN_ORDERS_TABLE}
+        - ${env:ARN_SNS_PUSH_CREATE_ORDER}
 
 functions:
   api:
