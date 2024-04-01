@@ -19,7 +19,7 @@ module.exports.login = async (event) => {
       },
     });
 
-    if (String(existingUsers.Items[0].identifier) === String(user.identifier)) {
+    if (existingUsers.Items.length > 0 && String(existingUsers.Items[0].identifier) === String(user.identifier)) {
       return {
         statusCode: 200,
         headers: {
@@ -30,6 +30,9 @@ module.exports.login = async (event) => {
     } else {
       return {
         statusCode: 401,
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ message: "Invalid credentials" }),
       };
     }
