@@ -14,10 +14,10 @@ provider:
         - dynamodb:*
         - sns:*
       Resource:
-        - ${env:ARN_EMPLOYEES_TABLE}
-        - ${env:ARN_MENUS_TABLE}
-        - ${env:ARN_ORDERS_TABLE}
-        - ${env:ARN_SNS_PUSH_CREATE_ORDER}
+        - arn:aws:dynamodb:sa-east-1:471112943987:table/Employees
+        - arn:aws:dynamodb:sa-east-1:471112943987:table/Menus
+        - arn:aws:dynamodb:sa-east-1:471112943987:table/Orders
+        - arn:aws:sns:sa-east-1:471112943987:create-order
 
 functions:
   api:
@@ -61,14 +61,12 @@ functions:
       - httpApi:
           path: /auth/login
           method: post
+
   dispatcher:
     handler: src/sns/push/android.createOrderPushNotification
     events:
       - sns:
           arn: arn:aws:sns:sa-east-1:471112943987:create-order
-
-plugins:
-  - serverless-pseudo-parameters
 
 resources:
   Resources:
