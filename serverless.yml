@@ -13,11 +13,13 @@ provider:
       Action:
         - dynamodb:*
         - sns:*
+        - ses:*
       Resource:
         - arn:aws:dynamodb:sa-east-1:471112943987:table/Employees
         - arn:aws:dynamodb:sa-east-1:471112943987:table/Menus
         - arn:aws:dynamodb:sa-east-1:471112943987:table/Orders
         - arn:aws:sns:sa-east-1:471112943987:create-order
+        - "*"
 
 functions:
   api:
@@ -62,7 +64,7 @@ functions:
           path: /auth/login
           method: post
 
-  dispatcher:
+  pushDispatcher:
     handler: src/sns/push/android.createOrderPushNotification
     events:
       - sns:
