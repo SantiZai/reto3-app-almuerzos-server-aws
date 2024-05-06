@@ -3,7 +3,6 @@ const AWS = require("aws-sdk");
 AWS.config.update({ region: "sa-east-1" });
 const ses = new AWS.SES();
 
-//TODO: no se envian correctamente los mails
 module.exports.createOrderEmailNotification = async (data) => {
   const { to, from, subject, text } = data;
 
